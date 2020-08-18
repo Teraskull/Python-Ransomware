@@ -3,7 +3,7 @@ from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 import base64
 
-# Generates RSA Encryption + Decryption keys / Public + Private keys
+# Generate RSA Encryption/Decryption keys and Public/Private keys.
 key = RSA.generate(2048)
 
 private_key = key.export_key()
