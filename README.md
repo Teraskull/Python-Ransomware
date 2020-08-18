@@ -2,7 +2,7 @@
 
 To test the Ransomware on your machine:
 
-* Edit lines 49 and 140 in the `RansomWare.py` file with your own absolute paths. For testing purposes you can use the `localRoot` directory.
+* Edit `self.localRoot` and `path` variables in the `RansomWare.py` file with your own absolute paths. For testing purposes you can use the `localRoot` directory.
 
 * **[ATTACKER]** Run the `RSA_private_public_keys.py` script to generate two keys: a private and public key.
 
