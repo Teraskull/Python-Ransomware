@@ -3,8 +3,6 @@ from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
 
-
-
 with open('EMAIL_ME.txt', 'rb') as f:
     enc_fernet_key = f.read()
     print(enc_fernet_key)
@@ -24,4 +22,3 @@ print(f'> Private key: {private_key}')
 print(f'> Private decrypter: {private_crypter}')
 print(f'> Decrypted fernet key: {dec_fernet_key}')
 print('> Decryption Completed')
-
